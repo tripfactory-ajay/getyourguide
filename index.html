@@ -66,6 +66,18 @@
             z-index: 50;
         }
 
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-container img {
+            height: 56px;
+            width: auto;
+            max-width: 200px;
+            object-fit: contain;
+        }
+
         .nav-link {
             color: #475569;
             font-size: 0.9rem;
@@ -103,21 +115,42 @@
             background: #b91c1c;
         }
 
-        /* Hero Section */
+        /* Hero Section with Background Image */
         .hero-section {
-            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #06b6d4 100%);
             position: relative;
+            min-height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
         }
 
-        .hero-section::before {
-            content: '';
+        .hero-bg-image {
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-            opacity: 0.3;
+            background-image: url('https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?ixlib=rb-4.0.3&auto=format&fit=crop&w=2021&q=80');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(30, 58, 138, 0.85) 0%, rgba(59, 130, 246, 0.8) 50%, rgba(6, 182, 212, 0.75) 100%);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 3rem 1rem;
         }
 
         /* Section Headers */
@@ -143,6 +176,10 @@
             .widget-grid {
                 grid-template-columns: repeat(2, 1fr) !important;
             }
+
+            .logo-container img {
+                height: 48px;
+            }
         }
 
         @media (max-width: 640px) {
@@ -153,6 +190,14 @@
             .desktop-nav {
                 display: none;
             }
+
+            .logo-container img {
+                height: 40px;
+            }
+
+            .hero-section {
+                min-height: 350px;
+            }
         }
     </style>
 <base target="_blank">
@@ -161,11 +206,11 @@
     <!-- Header - Matching TripFactory.com -->
     <header class="main-header">
         <div class="container mx-auto px-4">
-            <div class="flex items-center justify-between h-16">
-                <!-- Logo -->
-                <div class="flex items-center">
-                    <img src="trip-factory.png" alt="TripFactory" class="h-10 w-auto" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
-                    <div class="hidden items-center gap-2 text-red-600 font-bold text-2xl">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo - ENLARGED -->
+                <div class="logo-container">
+                    <img src="trip-factory.png" alt="TripFactory" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                    <div class="hidden items-center gap-2 text-red-600 font-bold text-3xl">
                         <i class="fas fa-plane"></i>
                         <span>TripFactory</span>
                     </div>
@@ -196,18 +241,20 @@
         </div>
     </header>
 
-    <!-- Hero Section -->
-    <section class="hero-section py-16 relative">
-        <div class="container mx-auto px-4 text-center relative z-10">
-            <h1 class="text-3xl md:text-4xl font-bold text-white mb-4">
+    <!-- Hero Section with Background Image -->
+    <section class="hero-section">
+        <div class="hero-bg-image"></div>
+        <div class="hero-overlay"></div>
+        <div class="hero-content container mx-auto px-4">
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 drop-shadow-lg">
                 Discover Amazing Tours & Activities
             </h1>
-            <p class="text-lg text-blue-100 max-w-2xl mx-auto mb-6">
+            <p class="text-xl md:text-2xl text-blue-100 max-w-3xl mx-auto mb-8 drop-shadow-md">
                 Explore hand-picked experiences around the world. From city tours to adventure activities, find the perfect addition to your trip.
             </p>
-            <div class="flex items-center justify-center gap-2 text-blue-200 text-sm">
-                <i class="fas fa-handshake"></i>
-                <span>Powered by GetYourGuide</span>
+            <div class="flex items-center justify-center gap-3 text-blue-200 text-lg">
+                <i class="fas fa-handshake text-2xl"></i>
+                <span class="font-medium">Powered by GetYourGuide</span>
             </div>
         </div>
     </section>

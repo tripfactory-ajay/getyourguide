@@ -1,1 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tours & Activities | TripFactory</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8fafc;
+            min-height: 100vh;
+        }
 
+        .widget-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s ease;
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+        }
+
+        .widget-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        .region-header {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+            padding: 0.75rem 1rem;
+            font-weight: 600;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .widget-container {
+            padding: 1rem;
+            min-height: 350px;
+        }
+
+        .destination-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            background: #eff6ff;
+            color: #1d4ed8;
+            padding: 0.375rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+
+        /* Header Styles - Matching TripFactory.com */
+        .main-header {
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .nav-link {
+            color: #475569;
+            font-size: 0.9rem;
+            font-weight: 500;
+            padding: 0.5rem 0;
+            transition: color 0.2s;
+            border-bottom: 2px solid transparent;
+        }
+
+        .nav-link:hover {
+            color: #dc2626;
+        }
+
+        .nav-link.active {
+            color: #dc2626;
+            border-bottom-color: #dc2626;
+        }
+
+        .dropdown-arrow {
+            font-size: 0.7rem;
+            margin-left: 0.25rem;
+        }
+
+        .book-btn {
+            background: #dc2626;
+            color: white;
+            padding: 0.625rem 1.25rem;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            transition: background 0.2s;
+        }
+
+        .book-btn:hover {
+            background: #b91c1c;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #06b6d4 100%);
+            position: relative;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.3;
+        }
+
+        /* Section Headers */
+        .section-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.25rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: #0f172a;
+            border-top: 1px solid #1e293b;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .widget-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .widget-grid {
+                grid-template-columns: 1fr !important;
+            }
+
+            .desktop-nav {
+                display: none;
+            }
+        }
+    </style>
+<base target="_blank">
+</head>
+<body>
+    <!-- Header - Matching TripFactory.com -->
+    <header class="main-header">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <img src="trip-factory.png" alt="TripFactory" class="h-10 w-auto" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                    <div class="hidden items-center gap-2 text-red-600 font-bold text-2xl">
+                        <i class="fas fa-plane"></i>
+                        <span>TripFactory</span>
+                    </div>
+                </div>
+
+                <!-- Navigation -->
+                <nav class="desktop-nav hidden md:flex items-center gap-8">
+                    <a href="#" class="nav-link flex items-center">
+                        Destinations
+                        <i class="fas fa-chevron-down dropdown-arrow"></i>
+                    </a>
+                    <a href="#" class="nav-link">Testimonials</a>
+                    <a href="#" class="nav-link">My Booking</a>
+                    <a href="#" class="nav-link">Organize a Group</a>
+                    <a href="#" class="nav-link">Our Offices</a>
+                </nav>
+
+                <!-- CTA Button -->
+                <div class="flex items-center gap-4">
+                    <button class="book-btn hidden sm:block">
+                        Book With Expert
+                    </button>
+                    <button class="md:hidden text-slate-600 text-xl">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section py-16 relative">
+        <div class="container mx-auto px-4 text-center relative z-10">
+            <h1 class="text-3xl md:text-4xl font-bold text-white mb-4">
+                Discover Amazing Tours & Activities
+            </h1>
+            <p class="text-lg text-blue-100 max-w-2xl mx-auto mb-6">
+                Explore hand-picked experiences around the world. From city tours to adventure activities, find the perfect addition to your trip.
+            </p>
+            <div class="flex items-center justify-center gap-2 text-blue-200 text-sm">
+                <i class="fas fa-handshake"></i>
+                <span>Powered by GetYourGuide</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-12">
+
+        <!-- EUROPE SECTION -->
+        <section class="mb-12">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="section-icon bg-blue-500">
+                    <i class="fas fa-landmark"></i>
+                </div>
+                <div>
+                    <h2 class="text-xl font-bold text-slate-800">Europe</h2>
+                    <p class="text-slate-500 text-sm">Historic cities, cultural experiences & scenic tours</p>
+                </div>
+            </div>
+
+            <div class="widget-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                <!-- United Kingdom -->
+                <div class="widget-card">
+                    <div class="region-header">
+                        <i class="fas fa-crown"></i>
+                        <span>United Kingdom</span>
+                    </div>
+                    <div class="widget-container">
+                        <div class="destination-tag">
+                            <i class="fas fa-map-marker-alt"></i>
+                            All UK Destinations
+                        </div>
+                        <div data-gyg-href="https://widget.getyourguide.com/default/city.frame" data-gyg-location-id="169017" data-gyg-locale-code="en-US" data-gyg-widget="city" data-gyg-partner-id="VV730HT"></div>
+                    </div>
+                </div>
+
+                <!-- London -->
+                <div class="widget-card">
+                    <div class="region-header" style="background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);">
+                        <i class="fas fa-city"></i>
+                        <span>London</span>
+                    </div>
+                    <div class="widget-container">
+                        <div class="destination-tag" style="background: #f3e8ff; color: #6d28d9;">
+                            <i class="fas fa-map-marker-alt"></i>
+                            Capital City
+                        </div>
+                        <div data-gyg-href="https://widget.getyourguide.com/default/city.frame" data-gyg-location-id="57" data-gyg-locale-code="en-US" data-gyg-widget="city" data-gyg-partner-id="VV730HT"></div>
+                    </div>
+                </div>
+
+                <!-- France -->
+                <div class="widget-card">
+                    <div class="region-header" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                        <i class="fas fa-wine-glass"></i>
+                        <span>France</span>
+                    </div>
+                    <div class="widget-container">
+                        <div class="destination-tag" style="background: #d1fae5; color: #059669;">
+                            <i class="fas fa-map-marker-alt"></i>
+                            All France Destinations
+                        </div>
+                        <div data-gyg-href="https://widget.getyourguide.com/default/city.frame" data-gyg-location-id="169008" data-gyg-locale-code="en-US" data-gyg-widget="city" data-gyg-partner-id="VV730HT"></div>
+                    </div>
+                </div>
+
+                <!-- Spain -->
+                <div class="widget-card">
+                    <div class="region-header" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+                        <i class="fas fa-sun"></i>
+                        <span>Spain</span>
+                    </div>
+                    <div class="widget-container">
+                        <div class="destination-tag" style="background: #fef3c7; color: #d97706;">
+                            <i class="fas fa-map-marker-alt"></i>
+                            All Spain Destinations
+                        </div>
+                        <div data-gyg-href="https://widget.getyourguide.com/default/city.frame" data-gyg-location-id="169003" data-gyg-locale-code="en-US" data-gyg-widget="city" data-gyg-partner-id="VV730HT"></div>
+                    </div>
+                </div>
+
+                <!-- Greece -->
+                <div class="widget-card">
+                    <div class="region-header" style="background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);">
+                        <i class="fas fa-umbrella-beach"></i>
+                        <span>Greece</span>
+                    </div>
+                    <div class="widget-container">
+                        <div class="destination-tag" style="background: #cffafe; color: #0891b2;">
+                            <i class="fas fa-map-marker-alt"></i>
+                            Islands & Mainland
+                        </div>
+                        <div data-gyg-href="https://widget.getyourguide.com/default/city.frame" data-gyg-location-id="169010" data-gyg-locale-code="en-US" data-gyg-widget="city" data-gyg-partner-id="VV730HT"></div>
+                    </div>
+                </div>
+
+                <!-- Turkey -->
+                <div class="widget-card">
+                    <div class="region-header" style="background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);">
+                        <i class="fas fa-mosque"></i>
+                        <span>Turkey</span>
+                    </div>
+                    <div class="widget-container">
+                        <div class="destination-tag" style="background: #fce7f3; color: #db2777;">
+                            <i class="fas fa-map-marker-alt"></i>
+                            All Turkey Destinations
+                        </div>
+                        <div data-gyg-href="https://widget.getyourguide.com/default/city.frame" data-gyg-location-id="169039" data-gyg-locale-code="en-US" data-gyg-widget="city" data-gyg-partner-id="VV730HT"></div>
+                    </div>
+                </div>
+
+                <!-- Europe (All) - Full Width -->
+                <div class="widget-card lg:col-span-3">
+                    <div class="region-header" style="background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);">
+                        <i class="fas fa-globe-europe"></i>
+                        <span>All Europe</span>
+                    </div>
+                    <div class="widget-container">
+                        <div class="destination-tag" style="background: #e0e7ff; color: #4f46e5;">
+                            <i class="fas fa-map-marker-alt"></i>
+                            Explore All European Destinations
+                        </div>
+                        <div data-gyg-href="https://widget.getyourguide.com/default/city.frame" data-gyg-location-id="207848" data-gyg-locale-code="en-US" data-gyg-widget="city" data-gyg-partner-id="VV730HT"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ASIA SECTION -->
+        <section class="mb-12">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="section-icon bg-rose-500">
+                    <i class="fas fa-torii-gate"></i>
+                </div>
+                <div>
+                    <h2 class="text-xl font-bold text-slate-800">Asia</h2>
+                    <p class="text-slate-500 text-sm">Ancient temples, tropical paradises & vibrant cultures</p>
+                </div>
+            </div>
+
+            <div class="widget-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                <!-- Bali -->
+                <div class="widget-card">
+                    <div class="region-header" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                        <i class="fas fa-leaf"></i>
+                        <span>Bali</span>
+                    </div>
+                    <div class="widget-container">
+                        <div class="destination-tag" style="background: #d1fae5; color: #059669;">
+                            <i class="fas fa-map-marker-alt"></i>
+                            Indonesia
+                        </div>
+                        <div data-gyg-href="https://widget.getyourguide.com/default/city.frame" data-gyg-location-id="347" data-gyg-locale-code="en-US" data-gyg-widget="city" data-gyg-partner-id="VV730HT"></div>
+                    </div>
+                </div>
+
+                <!-- Thailand -->
+                <div class="widget-card">
+                    <div class="region-header" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+                        <i class="fas fa-spa"></i>
+                        <span>Thailand</span>
+                    </div>
+                    <div class="widget-container">
+                        <div class="destination-tag" style="background: #fef3c7; color: #d97706;">
+                            <i class="fas fa-map-marker-alt"></i>
+                            All Thailand Destinations
+                        </div>
+                        <div data-gyg-href="https://widget.getyourguide.com/default/city.frame" data-gyg-location-id="169040" data-gyg-locale-code="en-US" data-gyg-widget="city" data-gyg-partner-id="VV730HT"></div>
+                    </div>
+                </div>
+
+                <!-- Singapore -->
+                <div class="widget-card">
+                    <div class="region-header" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);">
+                        <i class="fas fa-building"></i>
+                        <span>Singapore</span>
+                    </div>
+                    <div class="widget-container">
+                        <div class="destination-tag" style="background: #fee2e2; color: #dc2626;">
+                            <i class="fas fa-map-marker-alt"></i>
+                            Lion City
+                        </div>
+                        <div data-gyg-href="https://widget.getyourguide.com/default/city.frame" data-gyg-location-id="170" data-gyg-locale-code="en-US" data-gyg-widget="city" data-gyg-partner-id="VV730HT"></div>
+                    </div>
+                </div>
+
+                <!-- India -->
+                <div class="widget-card">
+                    <div class="region-header" style="background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);">
+                        <i class="fas fa-om"></i>
+                        <span>India</span>
+                    </div>
+                    <div class="widget-container">
+                        <div class="destination-tag" style="background: #ffedd5; color: #ea580c;">
+                            <i class="fas fa-map-marker-alt"></i>
+                            All India Destinations
+                        </div>
+                        <div data-gyg-href="https://widget.getyourguide.com/default/city.frame" data-gyg-location-id="169037" data-gyg-locale-code="en-US" data-gyg-widget="city" data-gyg-partner-id="VV730HT"></div>
+                    </div>
+                </div>
+
+                <!-- Malaysia -->
+                <div class="widget-card">
+                    <div class="region-header" style="background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);">
+                        <i class="fas fa-building"></i>
+                        <span>Malaysia</span>
+                    </div>
+                    <div class="widget-container">
+                        <div class="destination-tag" style="background: #cffafe; color: #0891b2;">
+                            <i class="fas fa-map-marker-alt"></i>
+                            All Malaysia Destinations
+                        </div>
+                        <div data-gyg-href="https://widget.getyourguide.com/default/city.frame" data-gyg-location-id="169045" data-gyg-locale-code="en-US" data-gyg-widget="city" data-gyg-partner-id="VV730HT"></div>
+                    </div>
+                </div>
+
+                <!-- Vietnam -->
+                <div class="widget-card">
+                    <div class="region-header" style="background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);">
+                        <i class="fas fa-dragon"></i>
+                        <span>Vietnam</span>
+                    </div>
+                    <div class="widget-container">
+                        <div class="destination-tag" style="background: #fee2e2; color: #b91c1c;">
+                            <i class="fas fa-map-marker-alt"></i>
+                            All Vietnam Destinations
+                        </div>
+                        <div data-gyg-href="https://widget.getyourguide.com/default/city.frame" data-gyg-location-id="169193" data-gyg-locale-code="en-US" data-gyg-widget="city" data-gyg-partner-id="VV730HT"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- MIDDLE EAST SECTION -->
+        <section class="mb-12">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="section-icon bg-amber-600">
+                    <i class="fas fa-mosque"></i>
+                </div>
+                <div>
+                    <h2 class="text-xl font-bold text-slate-800">Middle East</h2>
+                    <p class="text-slate-500 text-sm">Modern marvels, ancient wonders & desert adventures</p>
+                </div>
+            </div>
+
+            <div class="widget-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                <!-- UAE -->
+                <div class="widget-card">
+                    <div class="region-header" style="background: linear-gradient(135deg, #d97706 0%, #b45309 100%);">
+                        <i class="fas fa-building-columns"></i>
+                        <span>United Arab Emirates</span>
+                    </div>
+                    <div class="widget-container">
+                        <div class="destination-tag" style="background: #fef3c7; color: #b45309;">
+                            <i class="fas fa-map-marker-alt"></i>
+                            Dubai, Abu Dhabi & More
+                        </div>
+                        <div data-gyg-href="https://widget.getyourguide.com/default/city.frame" data-gyg-location-id="169038" data-gyg-locale-code="en-US" data-gyg-widget="city" data-gyg-partner-id="VV730HT"></div>
+                    </div>
+                </div>
+
+                <!-- Saudi Arabia -->
+                <div class="widget-card">
+                    <div class="region-header" style="background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);">
+                        <i class="fas fa-kaaba"></i>
+                        <span>Saudi Arabia</span>
+                    </div>
+                    <div class="widget-container">
+                        <div class="destination-tag" style="background: #dcfce7; color: #15803d;">
+                            <i class="fas fa-map-marker-alt"></i>
+                            All Saudi Arabia Destinations
+                        </div>
+                        <div data-gyg-href="https://widget.getyourguide.com/default/city.frame" data-gyg-location-id="169036" data-gyg-locale-code="en-US" data-gyg-widget="city" data-gyg-partner-id="VV730HT"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- AMERICAS SECTION -->
+        <section class="mb-12">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="section-icon bg-indigo-600">
+                    <i class="fas fa-flag-usa"></i>
+                </div>
+                <div>
+                    <h2 class="text-xl font-bold text-slate-800">Americas</h2>
+                    <p class="text-slate-500 text-sm">Iconic cities, natural wonders & diverse experiences</p>
+                </div>
+            </div>
+
+            <div class="widget-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                <!-- New York -->
+                <div class="widget-card">
+                    <div class="region-header" style="background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);">
+                        <i class="fas fa-city"></i>
+                        <span>New York</span>
+                    </div>
+                    <div class="widget-container">
+                        <div class="destination-tag" style="background: #dbeafe; color: #1e40af;">
+                            <i class="fas fa-map-marker-alt"></i>
+                            The Big Apple
+                        </div>
+                        <div data-gyg-href="https://widget.getyourguide.com/default/city.frame" data-gyg-location-id="59" data-gyg-locale-code="en-US" data-gyg-widget="city" data-gyg-partner-id="VV730HT"></div>
+                    </div>
+                </div>
+
+                <!-- California -->
+                <div class="widget-card">
+                    <div class="region-header" style="background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%);">
+                        <i class="fas fa-sun"></i>
+                        <span>California</span>
+                    </div>
+                    <div class="widget-container">
+                        <div class="destination-tag" style="background: #ffedd5; color: #c2410c;">
+                            <i class="fas fa-map-marker-alt"></i>
+                            Golden State
+                        </div>
+                        <div data-gyg-href="https://widget.getyourguide.com/default/city.frame" data-gyg-location-id="560" data-gyg-locale-code="en-US" data-gyg-widget="city" data-gyg-partner-id="VV730HT"></div>
+                    </div>
+                </div>
+
+                <!-- Florida -->
+                <div class="widget-card">
+                    <div class="region-header" style="background: linear-gradient(135deg, #0891b2 0%, #0e7490 100%);">
+                        <i class="fas fa-umbrella-beach"></i>
+                        <span>Florida</span>
+                    </div>
+                    <div class="widget-container">
+                        <div class="destination-tag" style="background: #cffafe; color: #0e7490;">
+                            <i class="fas fa-map-marker-alt"></i>
+                            Sunshine State
+                        </div>
+                        <div data-gyg-href="https://widget.getyourguide.com/default/city.frame" data-gyg-location-id="84" data-gyg-locale-code="en-US" data-gyg-widget="city" data-gyg-partner-id="VV730HT"></div>
+                    </div>
+                </div>
+
+                <!-- Washington -->
+                <div class="widget-card">
+                    <div class="region-header" style="background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);">
+                        <i class="fas fa-monument"></i>
+                        <span>Washington</span>
+                    </div>
+                    <div class="widget-container">
+                        <div class="destination-tag" style="background: #ede9fe; color: #6d28d9;">
+                            <i class="fas fa-map-marker-alt"></i>
+                            DC & State
+                        </div>
+                        <div data-gyg-href="https://widget.getyourguide.com/default/city.frame" data-gyg-location-id="62" data-gyg-locale-code="en-US" data-gyg-widget="city" data-gyg-partner-id="VV730HT"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- AFRICA & OCEANIA SECTION -->
+        <section class="mb-12">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="section-icon bg-emerald-600">
+                    <i class="fas fa-globe-africa"></i>
+                </div>
+                <div>
+                    <h2 class="text-xl font-bold text-slate-800">Africa & Oceania</h2>
+                    <p class="text-slate-500 text-sm">Safari adventures, outback experiences & island escapes</p>
+                </div>
+            </div>
+
+            <div class="widget-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                <!-- Kenya -->
+                <div class="widget-card">
+                    <div class="region-header" style="background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);">
+                        <i class="fas fa-paw"></i>
+                        <span>Kenya</span>
+                    </div>
+                    <div class="widget-container">
+                        <div class="destination-tag" style="background: #fee2e2; color: #b91c1c;">
+                            <i class="fas fa-map-marker-alt"></i>
+                            Safari Adventures
+                        </div>
+                        <div data-gyg-href="https://widget.getyourguide.com/default/city.frame" data-gyg-location-id="169122" data-gyg-locale-code="en-US" data-gyg-widget="city" data-gyg-partner-id="VV730HT"></div>
+                    </div>
+                </div>
+
+                <!-- Australia -->
+                <div class="widget-card">
+                    <div class="region-header" style="background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%);">
+                        <i class="fas fa-kangaroo"></i>
+                        <span>Australia</span>
+                    </div>
+                    <div class="widget-container">
+                        <div class="destination-tag" style="background: #fef9c3; color: #ca8a04;">
+                            <i class="fas fa-map-marker-alt"></i>
+                            All Australia Destinations
+                        </div>
+                        <div data-gyg-href="https://widget.getyourguide.com/default/city.frame" data-gyg-location-id="168949" data-gyg-locale-code="en-US" data-gyg-widget="city" data-gyg-partner-id="VV730HT"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <div class="flex items-center gap-2 text-white font-bold text-xl mb-4">
+                        <i class="fas fa-plane"></i>
+                        <span>TripFactory</span>
+                    </div>
+                    <p class="text-slate-400 text-sm">
+                        Your trusted partner for unforgettable travel experiences worldwide.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Destinations</h4>
+                    <ul class="space-y-2 text-slate-400 text-sm">
+                        <li><a href="#" class="hover:text-white transition">Europe</a></li>
+                        <li><a href="#" class="hover:text-white transition">Asia</a></li>
+                        <li><a href="#" class="hover:text-white transition">Americas</a></li>
+                        <li><a href="#" class="hover:text-white transition">Middle East</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Services</h4>
+                    <ul class="space-y-2 text-slate-400 text-sm">
+                        <li><a href="#" class="hover:text-white transition">Tours & Activities</a></li>
+                        <li><a href="#" class="hover:text-white transition">Hotels</a></li>
+                        <li><a href="#" class="hover:text-white transition">Flights</a></li>
+                        <li><a href="#" class="hover:text-white transition">Packages</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Support</h4>
+                    <ul class="space-y-2 text-slate-400 text-sm">
+                        <li><a href="#" class="hover:text-white transition">Contact Us</a></li>
+                        <li><a href="#" class="hover:text-white transition">FAQs</a></li>
+                        <li><a href="#" class="hover:text-white transition">Terms & Conditions</a></li>
+                        <li><a href="#" class="hover:text-white transition">Privacy Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-slate-800 pt-8 flex flex-col md:flex-row items-center justify-between">
+                <p class="text-slate-500 text-sm">
+                    © 2026 TripFactory. All rights reserved.
+                </p>
+                <div class="flex items-center gap-2 text-slate-500 text-sm mt-4 md:mt-0">
+                    <span>Tours powered by</span>
+                    <span class="font-semibold text-white">GetYourGuide</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- GetYourGuide Widget Script -->
+    <script async defer src="https://widget.getyourguide.com/dist/pa.umd.production.min.js" data-gyg-partner-id="VV730HT"></script>
+
+</body>
+</html>
